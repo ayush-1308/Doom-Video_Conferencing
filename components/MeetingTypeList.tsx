@@ -8,6 +8,7 @@ import { useUser } from '@clerk/nextjs'
 import { Call, useStreamVideoClient } from '@stream-io/video-react-sdk'
 import { useToast } from "@/components/ui/use-toast"
 import { Textarea } from './ui/textarea'
+import ReactDatePicker from 'react-datepicker';
 
 const MeetingTypeList = () => {
 const router = useRouter();
@@ -65,6 +66,7 @@ const createMeeting= async () => {
   }
 }
 
+const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetails?.id}`
   return (
     <section className='grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4'>
         <HomeCard
@@ -105,8 +107,23 @@ const createMeeting= async () => {
         >
           <div className='flex flex-col gap-2.5'>
             <label className='text-base text-normal leading-[22px]'>Add a description</label>
-            <Textarea className='border-none bg-dark-2 focus-visible:ring-0 focus-visible:ring-offset-0' />
+            <Textarea className='border-none bg-dark-2 focus-visible:ring-0 focus-visible:ring-offset-0'
+              onChange={(e) => setValues({ ...values, description: e.target.value })}
+            />
 
+          </div>
+          <div className='flex w-full flex-col gap-2.5'>
+          <label className='text-base text-normal leading-[22px]'>Select Date and Time</label>
+          <ReactDatePicker 
+           selected={values.dateTime}
+           onChange={(date) => setValues({ ...values, dateTime: date! })}
+           showTimeSelect
+           timeFormat='HH:mm'
+           timeIntervals={15}
+           timeCaption='Time'
+           dateFormat={'MMMM d, yyyy h:mm aa'}
+           className='w-full rounded bg-dark-3 p-2 focus:outline-none'
+           />
           </div>
         </MeetingModal>
       ): (
@@ -116,8 +133,8 @@ const createMeeting= async () => {
         title="Meeting Created"
         className="text-center"
         handleClick={() => {
-         // navigator.clipboard.writeText(meetingLink);
-         //toast({ title: 'Link Copied' });
+         navigator.clipboard.writeText(meetingLink);
+         toast({ title: 'Link Copied' });
         }}
         image='icons/checked.svg'
         buttonIcon='icons/copy.svg'
