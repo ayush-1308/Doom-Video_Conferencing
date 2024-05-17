@@ -5,7 +5,7 @@
 import { useGetCalls } from '@/hooks/useGetCalls';
 import { Call, CallRecording } from '@stream-io/video-react-sdk';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MeetingCard from './MeetingCard';
 import Loader from './Loader';
 
@@ -40,6 +40,18 @@ const getNoCallsMessage = () => {
             return '';            
     }
 }
+
+useEffect(() => {
+    const fetchRecordings = async () => {
+        const callData = await Promise.call(callRecordings.map((meeting) => meeting.queryMembers()));
+
+        const recordings = callData.filter(call => call.recordings.length > 0)
+        .flatMap(call => call.recordings)
+    }
+    if(type === 'recordings') {
+        fetchRecordings();
+    }
+}, [type, callRecordings]);
 
 const calls = getCalls();
 const noCallsMessage = getNoCallsMessage();
