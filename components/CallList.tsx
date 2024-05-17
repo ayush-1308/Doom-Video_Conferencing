@@ -80,8 +80,8 @@ if(isLoading) {
             ? '/icons/upcoming.svg'
             : '/icons/recordings.svg'
         }
-        title={(meeting as Call).state?.custom.description.substring(0, 25) || 'No Description'}
-        date={meeting.state?.startsAt.toLocaleString() || meeting.filename.substring(0, 20) || meeting.start_time.toLocaleString()}
+        title={(meeting as Call).state?.custom?.description?.substring(0, 25) || 'Personal Meeting'}
+        date={meeting.state?.startsAt.toLocaleString() || meeting?.filename?.substring(0, 20) || meeting.start_time.toLocaleString()}
         isPreviousMeeting={type === 'ended'}
         buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
         handleClick={
